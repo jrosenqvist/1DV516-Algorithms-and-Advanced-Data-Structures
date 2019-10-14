@@ -1,4 +1,4 @@
-package assignment1;
+package assignment1.binarysearchtree;
 
 public interface A1Tree {
 	public void insert(Integer value);
