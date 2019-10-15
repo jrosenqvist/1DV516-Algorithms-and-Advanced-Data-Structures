@@ -1,13 +1,11 @@
 package exercise1;
 
-import javax.naming.SizeLimitExceededException;
-
 public class MyHashTable<T> implements A2HashTable<T> {
     private Object[] t;
     private int size;
     private Primes primes;
 
-    MyHashTable() {
+    public MyHashTable() {        
         t = new Object[19];
         primes = new Primes();
         size = 0;
@@ -15,6 +13,7 @@ public class MyHashTable<T> implements A2HashTable<T> {
 
     @Override    
     public void insert(T element) {
+        Element elem = new Element(element);
         int hash = Math.abs(element.hashCode());
         int step = 1;
         int index = hash % t.length;
@@ -22,13 +21,12 @@ public class MyHashTable<T> implements A2HashTable<T> {
             index = (hash + (step * step)) % t.length;
             step++;
         }
-        t[index] = element;
+        t[index] = elem;
         size++;
-        if (size >= (t.length / 2)) {
-            System.out.println("Behöver expandera, antal element " + size);
+        if (size >= (t.length / 2)) {            
             try {
                 rehash();
-            } catch (SizeLimitExceededException e) {
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
@@ -38,12 +36,15 @@ public class MyHashTable<T> implements A2HashTable<T> {
     public void delete(T element) {
         int hash = Math.abs(element.hashCode());
         int index = hash % t.length;
-        for (int i = 0; i < t.length; i++) {
+        for (int i = 0; i < t.length / 2; i++) {
             index = (hash + (i * i)) % t.length;
-            if (t[index] == null) continue;
+            if (t[index] == null) return;
 
-            if (t[index].equals(element)) {
-                t[index] = null;
+            @SuppressWarnings("unchecked")
+            Element elem = (Element) t[index];
+
+            if (elem.equals(element)) {
+                elem.disable();
                 return;
             }
         }
@@ -53,11 +54,16 @@ public class MyHashTable<T> implements A2HashTable<T> {
     public boolean contains(T element) {
         int hash = Math.abs(element.hashCode());
         int index = hash % t.length;
-        for (int i = 0; i < t.length; i++) {            
+        for (int i = 0; i < t.length / 2; i++) {            
             index = (hash + (i * i)) % t.length;            
-            if (t[index] == null) continue;
+            if (t[index] == null) return false;
 
-            if (t[index].equals(element)) {
+            @SuppressWarnings("unchecked")
+            Element elem = (Element) t[index];
+
+            if (elem.isDisabled()) return false;
+
+            if (elem.equals(element)) {
                 return true;
             }
         }
@@ -69,11 +75,10 @@ public class MyHashTable<T> implements A2HashTable<T> {
         return t.length;
     }
 
+    // Only for testing purposes, do not use on large tables
     public void printTable() {
         StringBuilder sb = new StringBuilder();
-        for (Object obj : t) {
-            // if (obj == null)
-            // continue;
+        for (Object obj : t) {            
             sb.append(obj);
             sb.append(", ");
         }
@@ -81,20 +86,51 @@ public class MyHashTable<T> implements A2HashTable<T> {
         System.out.println(sb.toString());
     }
 
-    private void rehash() throws SizeLimitExceededException {
+    // Resizes table and removes elements marked as disabled
+    private void rehash() throws Exception {
         int newSize = primes.getPrime(t.length * 2);
-
-        @SuppressWarnings("unchecked")
-        T[] old = (T[]) t;
+        
+        Object[] old =  t;
         
         t = new Object[newSize];
         size = 0;
                 
-        for (int i = 0; i < old.length; i++) {
-            if (old[i] != null) {                  
-                insert(old[i]);                
+        for (int i = 0; i < old.length / 2; i++) {
+            if (old[i] != null) {
+                @SuppressWarnings("unchecked") 
+                Element elem = (Element) old[i];
+                
+                if (elem.isDisabled()) continue;
+                
+                @SuppressWarnings("unchecked")
+                T value = (T) elem.getValue();
+
+                insert(value);                
             }            
         }        
+    }
+
+    // Container class to help optimize contains() and delete()
+    private class Element {
+        private boolean disabled;
+        private T value;
+
+        Element(T value) {
+            disabled = false;
+            this.value = value;
+        }
+        
+        public Object getValue() { return value; }
+
+        public boolean isDisabled() { return disabled; }
+
+        public void disable() { disabled = true; }
+
+        @Override
+        public int hashCode() { return value.hashCode(); }
+
+        @Override
+        public boolean equals(Object o) { return value.equals(o); }
     }
 
     // Sieve of Eratosthenes
@@ -105,14 +141,13 @@ public class MyHashTable<T> implements A2HashTable<T> {
             sieve = generateSieve(1000000);
         }
 
-        int getPrime(int largerThan) throws SizeLimitExceededException {
+        int getPrime(int largerThan) throws Exception {
             for (int i = largerThan; i < sieve.length; i++) {
-                if (sieve[i] == true) {
-                    System.out.println("Ska vara större än " + largerThan + ", hittade " + i);
+                if (sieve[i] == true) {                    
                     return i;
                 }
-            }
-            throw new SizeLimitExceededException("Cannot find a new larger prime.");
+            }            
+            throw new Exception("Cannot find a new larger prime.");
         }
 
         private boolean[] generateSieve(int size) {
@@ -129,5 +164,5 @@ public class MyHashTable<T> implements A2HashTable<T> {
             }
             return prime;
         }
-    }
+    }    
 }
