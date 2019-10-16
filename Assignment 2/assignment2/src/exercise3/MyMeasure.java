@@ -6,26 +6,35 @@ public class MyMeasure implements A2Measure {
 
     @Override
     public boolean isSameCollection(int[] array1, int[] array2) {
-        if (array1.length != array2.length) 
+        if (array1.length != array2.length)
             return false;
         MyHashTable<Integer> mht = new MyHashTable<>();
         for (int i = 0; i < array1.length; i++) {
             mht.insert(array1[i]);
-            System.out.println("Insertar " + array1[i]);
         }
         for (int i = 0; i < array2.length; i++) {
             if (!mht.contains(array2[i]))
                 return false;
             mht.delete(array2[i]);
-            System.out.println("Tog bort " + array2[i]);
         }
         return true;
     }
 
     @Override
     public int minDifferences(int[] array1, int[] array2) {
-        // TODO Auto-generated method stub
-        return 0;
+        if (array1.length != array2.length)
+            return -1;
+
+        MergeSort ms = new MergeSort();
+        ms.startSort(array1);
+        ms.startSort(array2);
+        
+        int sum = 0;
+        for (int i = 0; i < array1.length; i++) {
+            sum += Math.pow(array1[i] - array2[i], 2);
+        }
+        
+        return sum;
     }
 
     @Override
@@ -34,4 +43,56 @@ public class MyMeasure implements A2Measure {
         return null;
     }
 
+    private class MergeSort {
+        public void startSort(int[] array) {            
+            sort(array, 0, array.length - 1);            
+        }
+
+        private void sort(int[] arr, int l, int r) {
+            if (l < r) {
+                int m = (l + r) / 2;
+
+                sort(arr, l, m);
+                sort(arr, m + 1, r);
+
+                merge(arr, l, m, r);
+            }
+        }
+
+        private void merge(int[] arr, int l, int m, int r) {
+            int left[] = new int[m - l + 1];
+            int right[] = new int[r - m];
+            
+            for (int i = 0; i < left.length; i++)
+                left[i] = arr[l + i];
+            for (int i = 0; i < right.length; i++)
+                right[i] = arr[m + i + 1];
+            
+            int li = 0, ri = 0, i = l;
+
+            while (li < left.length && ri < right.length) {
+                if (left[li] <= right[ri]) {
+                    arr[i] = left[li];
+                    li++;
+                } 
+                else {
+                    arr[i] = right[ri];
+                    ri++;
+                }
+                i++;
+            }
+
+            while (li < left.length) {
+                arr[i] = left[li];
+                i++;
+                li++;
+            }            
+
+            while (ri < right.length) {
+                arr[i] = right[ri];
+                i++;
+                ri++;
+            }
+        }
+    }
 }
