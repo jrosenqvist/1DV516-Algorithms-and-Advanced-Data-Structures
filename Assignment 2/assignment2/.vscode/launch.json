@@ -4,6 +4,13 @@
             "type": "java",
             "name": "CodeLens (Launch) - Program",
             "request": "launch",
+            "mainClass": "exercise2.Program",
+            "projectName": "assignment2"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Program",
+            "request": "launch",
             "mainClass": "exercise1.Program",
             "projectName": "assignment2"
         }

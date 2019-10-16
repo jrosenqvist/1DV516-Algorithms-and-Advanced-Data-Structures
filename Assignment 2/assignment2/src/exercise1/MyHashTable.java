@@ -12,17 +12,20 @@ public class MyHashTable<T> implements A2HashTable<T> {
     }
 
     @Override    
-    public void insert(T element) {
+    public void insert(T element) {            
         Element elem = new Element(element);
-        int hash = Math.abs(element.hashCode());
-        int step = 1;
+        int hash = Math.abs(element.hashCode());        
+        int step = 0;
         int index = hash % t.length;
+        
         while (t[index] != null) {
             index = (hash + (step * step)) % t.length;
             step++;
         }
-        t[index] = elem;
+        
+        t[index] = elem;        
         size++;
+
         if (size >= (t.length / 2)) {            
             try {
                 rehash();
@@ -34,7 +37,7 @@ public class MyHashTable<T> implements A2HashTable<T> {
 
     @Override
     public void delete(T element) {
-        int hash = Math.abs(element.hashCode());
+        int hash = Math.abs(element.hashCode());                
         int index = hash % t.length;
         for (int i = 0; i < t.length / 2; i++) {
             index = (hash + (i * i)) % t.length;
@@ -46,26 +49,28 @@ public class MyHashTable<T> implements A2HashTable<T> {
             if (elem.equals(element)) {
                 elem.disable();
                 return;
-            }
+            }        
         }
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(T element) {        
         int hash = Math.abs(element.hashCode());
-        int index = hash % t.length;
+        int index = hash % t.length;        
         for (int i = 0; i < t.length / 2; i++) {            
             index = (hash + (i * i)) % t.length;            
-            if (t[index] == null) return false;
+            
+            if (t[index] == null) 
+                return false;
 
             @SuppressWarnings("unchecked")
             Element elem = (Element) t[index];
-
-            if (elem.isDisabled()) return false;
-
-            if (elem.equals(element)) {
+            
+            if (elem.isDisabled()) return false;            
+            
+            if (elem.getValue().equals(element)) {                
                 return true;
-            }
+            }            
         }
         return false;
     }
@@ -95,16 +100,15 @@ public class MyHashTable<T> implements A2HashTable<T> {
         t = new Object[newSize];
         size = 0;
                 
-        for (int i = 0; i < old.length / 2; i++) {
+        for (int i = 0; i < old.length; i++) {
             if (old[i] != null) {
                 @SuppressWarnings("unchecked") 
                 Element elem = (Element) old[i];
                 
                 if (elem.isDisabled()) continue;
+                                
+                T value = elem.value;
                 
-                @SuppressWarnings("unchecked")
-                T value = (T) elem.getValue();
-
                 insert(value);                
             }            
         }        
@@ -130,7 +134,16 @@ public class MyHashTable<T> implements A2HashTable<T> {
         public int hashCode() { return value.hashCode(); }
 
         @Override
-        public boolean equals(Object o) { return value.equals(o); }
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o instanceof MyHashTable.Element) {
+                @SuppressWarnings("unchecked")
+                Element e = (Element) o;
+                return value.equals(e.value); 
+            }
+            return false;
+        }
     }
 
     // Sieve of Eratosthenes
