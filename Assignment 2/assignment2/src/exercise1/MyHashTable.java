@@ -30,7 +30,7 @@ public class MyHashTable<T> implements A2HashTable<T> {
             try {
                 rehash();
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("ERROR: Maximum table size reached.");
             }
         }
     }
@@ -46,7 +46,7 @@ public class MyHashTable<T> implements A2HashTable<T> {
             @SuppressWarnings("unchecked")
             Element elem = (Element) t[index];
 
-            if (elem.equals(element)) {
+            if (elem.getValue().equals(element)) {
                 elem.disable();
                 return;
             }        
@@ -145,37 +145,21 @@ public class MyHashTable<T> implements A2HashTable<T> {
             return false;
         }
     }
-
-    // Sieve of Eratosthenes
-    private class Primes {
-        private boolean[] sieve;
-
-        Primes() {
-            sieve = generateSieve(1000000);
+    
+    private class Primes {        
+        public int getPrime(int largerThan) throws Exception {
+            for (int i = largerThan; i < Integer.MAX_VALUE; i++) {
+                if (isPrime(i)) return i;
+            }
+            throw new Exception("Cannot find new prime that large");
         }
 
-        int getPrime(int largerThan) throws Exception {
-            for (int i = largerThan; i < sieve.length; i++) {
-                if (sieve[i] == true) {                    
-                    return i;
-                }
-            }            
-            throw new Exception("Cannot find a new larger prime.");
-        }
-
-        private boolean[] generateSieve(int size) {
-            boolean[] prime = new boolean[size + 1];
-            for (int i = 0; i < size; i++) {
-                prime[i] = true;
+        private boolean isPrime(int n) {
+            for (int i = 2; i < Math.sqrt(n); i++) {
+                if (n % i == 0)
+                    return false;
             }
-            for (int p = 2; p * p <= size; p++) {
-                if (prime[p] == true) {
-                    for (int i = p * p; i <= size; i += p) {
-                        prime[i] = false;
-                    }
-                }
-            }
-            return prime;
+            return true;
         }
     }    
 }

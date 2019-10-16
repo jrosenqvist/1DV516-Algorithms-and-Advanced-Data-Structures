@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Program {
     public static void main(String[] args) {
-        MyHashTable<Integer> mht = new MyHashTable<Integer>();        
-        int inserted[] = new int[15000];
+        MyHashTable<Integer> mht = new MyHashTable<>();        
+        int inserted[] = new int[1500];
         Random r = new Random();
         int count = 0;
         for (int i = 0; i < inserted.length; i++) {            
@@ -23,7 +23,7 @@ public class Program {
         System.out.println(mht.getLengthOfArray());
         
         
-        MyHashTable<String> mht2 = new MyHashTable<String>();               
+        MyHashTable<String> mht2 = new MyHashTable<>();               
         mht2.insert("Hejsan");
         mht2.insert("Hejsan");        
         System.out.println(mht2.contains("Hejsan"));
