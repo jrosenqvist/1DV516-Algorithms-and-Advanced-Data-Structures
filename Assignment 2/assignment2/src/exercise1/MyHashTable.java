@@ -46,6 +46,8 @@ public class MyHashTable<T> implements A2HashTable<T> {
             @SuppressWarnings("unchecked")
             Element elem = (Element) t[index];
 
+            if (elem.isDisabled()) continue;
+
             if (elem.getValue().equals(element)) {
                 elem.disable();
                 return;
@@ -66,9 +68,9 @@ public class MyHashTable<T> implements A2HashTable<T> {
             @SuppressWarnings("unchecked")
             Element elem = (Element) t[index];
             
-            if (elem.isDisabled()) return false;            
+            if (elem.isDisabled()) continue;            
             
-            if (elem.getValue().equals(element)) {                
+            if (elem.getValue().equals(element)) {                            
                 return true;
             }            
         }

@@ -2,12 +2,12 @@ package exercise2;
 
 import java.util.Arrays;
 
-public class Program {
+public class E2Main {
     private A2Direction[] array;
     private A2Itinerary<A2Direction> itinerary;
 
     public static void main(String[] args) {
-        Program p1 = new Program();
+        E2Main p1 = new E2Main();
         p1.fillSix();
         p1.createItinerary();
 

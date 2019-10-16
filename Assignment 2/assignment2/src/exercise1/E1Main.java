@@ -2,7 +2,7 @@ package exercise1;
 
 import java.util.Random;
 
-public class Program {
+public class E1Main {
     public static void main(String[] args) {
         MyHashTable<Integer> mht = new MyHashTable<>();        
         int inserted[] = new int[1500];
