@@ -65,41 +65,31 @@ public class MyItinerary implements A2Itinerary<A2Direction> {
     }
 
     private int calculateSize(A2Direction a, A2Direction b) {
-        int x = 0, y = 0, i = 0;
-
-        while (i < itinerary.length) {
+        int max = 0;
+        for (int i = 0; i < itinerary.length; i++) {
             if (itinerary[i] == a) {
-                int n = sizeHelper(a, i);                                
-                if (n > x)
-                    x = n;
-                i += n;
-                continue;
+                int n = 1;
+                int j = i + 1;
+                while (j < itinerary.length) {
+                    if (itinerary[j] == b) break;                    
+                    if (itinerary[j] == a) n++;
+                    j++;
+                }
+                if (n > max) max = n;
+                             
             }
             if (itinerary[i] == b) {
-                int n = sizeHelper(b, i);                
-                if (n > y)
-                    y = n;
-                i += n;
-                continue;
-            }            
-            i++;
+                int n = 1;
+                int j = i + 1;
+                while (j < itinerary.length) {
+                    if (itinerary[j] == a) break;
+                    if (itinerary[j] == b) n++;
+                    j++;
+                }
+                if (n > max) max = n;                
+            }
         }
-        if (x > y)
-            return x;
-        return y;
-    }
-
-    private int sizeHelper(A2Direction d, int index) {
-        A2Direction e = values[Math.abs(d.ordinal() - 2)];         
-        int n = 1;
-        int i = index + 1;
-        while (i < itinerary.length && itinerary[i] != e) {
-            if (itinerary[i] == d)
-                n++;
-            i++;
-        }
-        System.out.println("Hoppar tillbaka från helper med riktning = " + d + " n = " + n);
-        return n;
+        return max;
     }
 
     private class Coordinate {
