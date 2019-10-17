@@ -39,8 +39,16 @@ public class MyMeasure implements A2Measure {
 
     @Override
     public int[] getPercentileRange(int[] arr, int lower, int upper) {
-        // TODO Auto-generated method stub
-        return null;
+        MergeSort ms = new MergeSort();
+        ms.startSort(arr);
+
+        int[] newArray = new int[arr.length * (upper - lower) / 100];
+        int j = 0;
+        for (int i = arr.length * lower / 100; i < arr.length * upper / 100; i++) {
+            newArray[j] = arr[i];
+            j++;
+        }
+        return newArray;
     }
 
     private class MergeSort {
