@@ -68,29 +68,29 @@ public class MyMeasure implements A2Measure {
             for (int i = 0; i < right.length; i++)
                 right[i] = arr[m + i + 1];
             
-            int li = 0, ri = 0, i = l;
+            int li = 0, ri = 0, ai = l;
 
             while (li < left.length && ri < right.length) {
                 if (left[li] <= right[ri]) {
-                    arr[i] = left[li];
+                    arr[ai] = left[li];
                     li++;
                 } 
                 else {
-                    arr[i] = right[ri];
+                    arr[ai] = right[ri];
                     ri++;
                 }
-                i++;
+                ai++;
             }
 
             while (li < left.length) {
-                arr[i] = left[li];
-                i++;
+                arr[ai] = left[li];
+                ai++;
                 li++;
             }            
 
             while (ri < right.length) {
-                arr[i] = right[ri];
-                i++;
+                arr[ai] = right[ri];
+                ai++;
                 ri++;
             }
         }
