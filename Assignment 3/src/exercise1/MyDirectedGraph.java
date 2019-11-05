@@ -8,7 +8,7 @@ public class MyDirectedGraph implements A3Graph {
 
     @Override
     public void addVertex(int vertex) {
-        this.vertices.add(new Vertex(vertex));
+        this.vertices.add(new Vertex());
     }
 
     @Override
@@ -36,12 +36,11 @@ public class MyDirectedGraph implements A3Graph {
         return null;
     }
 
-    private class Vertex {
-        int name;
-        List<Edge> connections = new ArrayList<>();
+    private class Vertex {        
+        List<Edge> connections;
 
-        Vertex(int name) {
-            this.name = name;
+        Vertex() {
+            connections = new ArrayList<>();
         }
 
     }
@@ -53,6 +52,14 @@ public class MyDirectedGraph implements A3Graph {
         Edge(Vertex start, Vertex end) {
             this.start = start;
             this.end = end;
+        }
+
+        public Vertex getStart() {
+            return start;
+        }
+
+        public Vertex getEnd() {
+            return end;
         }
     }
 }
