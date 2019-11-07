@@ -1,25 +1,33 @@
 package exercise1;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-public class MyUndirectedGraph implements A3Graph {
+public class MyUndirectedGraph implements A3Graph {    
+    private List<Vertex> vertices = new ArrayList<>();
+    private List<Edge> connections = new ArrayList<>();
 
     @Override
     public void addVertex(int vertex) {
-        // TODO Auto-generated method stub
-
+        vertices.add(vertex, new Vertex(vertex));        
     }
 
     @Override
     public void addEdge(int sourceVertex, int targetVertex) {
-        // TODO Auto-generated method stub
-
+        Vertex source = vertices.get(sourceVertex);
+        Vertex target = vertices.get(targetVertex);
+        connections.add(new Edge(source, target));
     }
 
     @Override
     public boolean isConnected() {
-        // TODO Auto-generated method stub
-        return false;
+        HashSet<Vertex> connected = new HashSet<>(2 * vertices.size());
+        for (Edge e: connections) {
+            connected.add(e.v1);
+            connected.add(e.v2);
+        }
+        return connected.size() == vertices.size();
     }
 
     @Override
@@ -44,5 +52,23 @@ public class MyUndirectedGraph implements A3Graph {
     public List<Integer> eulerPath() {
         // TODO Auto-generated method stub
         return A3Graph.super.eulerPath();
+    }
+
+    private class Vertex {
+        int id;
+
+        Vertex(int id) {
+            this.id = id;
+        }
+    }
+
+    private class Edge {
+        Vertex v1;
+        Vertex v2;
+
+        Edge(Vertex v1, Vertex v2) {
+            this.v1 = v1;
+            this.v2 = v2;
+        }
     }
 }
