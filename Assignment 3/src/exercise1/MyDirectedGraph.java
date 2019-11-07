@@ -3,6 +3,7 @@ package exercise1;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Stack;
 
 public class MyDirectedGraph implements A3Graph {
@@ -10,16 +11,23 @@ public class MyDirectedGraph implements A3Graph {
 
     @Override
     public void addVertex(int vertex) {
-        this.vertices.add(vertex, new Vertex(vertex));
-        // TODO kolla om det är fler ställen där detta spelar roll
+        this.vertices.add(new Vertex(vertex));        
     }
 
     @Override
-    public void addEdge(int sourceVertex, int targetVertex) {
-        Vertex source = vertices.get(sourceVertex);
-        Vertex target = vertices.get(targetVertex);
-        source.connections.add(new Edge(source, target));
+    public void addEdge(int sourceVertex, int targetVertex) throws NoSuchElementException {
+        Vertex source = null;
+        Vertex target = null;
+        for (Vertex v : vertices) {            
+            if (v.id == sourceVertex) source = v;
+            if (v.id == targetVertex) target = v;
+            if (source != null && target != null) break;
+        }
+        if (source == null || target == null) {            
+            throw new NoSuchElementException();
+        }
         target.connections.add(new Edge(source, target));
+        source.connections.add(new Edge(source, target));
     }
 
     @Override
@@ -27,15 +35,14 @@ public class MyDirectedGraph implements A3Graph {
         return (connectedComponents().size() < 2);
     }
 
+    //TODO fixa detta så det kan vara generiskt
     @Override
-    public boolean isAcyclic() {
-        int size = vertices.size();
-        if (size < 2)
-            return true;
-        boolean[] visited = new boolean[size];
-        boolean[] origin = new boolean[size];
+    public boolean isAcyclic() {        
+        HashSet<Vertex> visited = new HashSet<>();
+        HashSet<Vertex> recursion = new HashSet<>();
+        
         for (Vertex v : vertices) {
-            if (acyclicHelper(v, visited, origin))
+            if (acyclicHelper(v, visited, recursion))
                 return false;
         }
         return true;
@@ -63,32 +70,25 @@ public class MyDirectedGraph implements A3Graph {
                 connections.add(set);
             }
         }
-
-        connections.forEach(list -> {
-            list.forEach(n -> System.out.print(n));
-            System.out.println();
-        });
         
         return connections;
     }
 
-    private boolean acyclicHelper(Vertex v, boolean[] visited, boolean[] origin) {
-        if (origin[v.id])
-            return true;
+    private boolean acyclicHelper(Vertex v, HashSet<Vertex> visited, HashSet<Vertex> recursion) {                
+        if (!visited.contains(v)) {
+            visited.add(v);
+            recursion.add(v);
 
-        if (visited[v.id])
-            return false;
-
-        visited[v.id] = true;
-        origin[v.id] = true;
-
-        for (Edge e : v.connections) {
-            if (acyclicHelper(e.target, visited, origin))
-                return true;
-        }
-
-        origin[v.id] = false;
-
+            for (Edge e : v.connections) {
+                if (e.target == v) {
+                    if (!visited.contains(e.source) && acyclicHelper(e.source, visited, recursion))
+                        return true;
+                    else if (recursion.contains(e.source))
+                        return true;
+                }
+            }            
+        }        
+        recursion.remove(v);
         return false;
     }
 
@@ -120,6 +120,10 @@ public class MyDirectedGraph implements A3Graph {
         Vertex(int id) {
             this.id = id;
             connections = new ArrayList<>();
+        }
+
+        public String toString() {
+            return String.valueOf(id);
         }
     }
 

@@ -3,43 +3,91 @@ package exercise1;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class MyUndirectedGraph implements A3Graph {    
     private List<Vertex> vertices = new ArrayList<>();
-    private List<Edge> connections = new ArrayList<>();
-
+    
     @Override
     public void addVertex(int vertex) {
-        vertices.add(vertex, new Vertex(vertex));        
+        vertices.add(new Vertex(vertex));        
     }
 
     @Override
-    public void addEdge(int sourceVertex, int targetVertex) {
-        Vertex source = vertices.get(sourceVertex);
-        Vertex target = vertices.get(targetVertex);
-        connections.add(new Edge(source, target));
+    public void addEdge(int sourceVertex, int targetVertex) throws NoSuchElementException {
+        Vertex source = null;
+        Vertex target = null;
+        for (Vertex v : vertices) {            
+            if (v.id == sourceVertex) source = v;
+            if (v.id == targetVertex) target = v;
+            if (source != null && target != null) break;
+        }
+        if (source == null || target == null) {            
+            throw new NoSuchElementException();
+        }
+        
+        source.adjacent.add(target);
+        target.adjacent.add(source);        
     }
 
     @Override
     public boolean isConnected() {
-        HashSet<Vertex> connected = new HashSet<>(2 * vertices.size());
-        for (Edge e: connections) {
-            connected.add(e.v1);
-            connected.add(e.v2);
+        HashSet<Vertex> connected = new HashSet<>();
+        for (Vertex v : vertices) {
+            for (Vertex u : v.adjacent) {
+                connected.add(u);
+            }
         }
         return connected.size() == vertices.size();
     }
 
     @Override
     public boolean isAcyclic() {
-        // TODO Auto-generated method stub
+        HashSet<Vertex> visited = new HashSet<>();
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex current = vertices.get(i);
+            if (!visited.contains(current)) 
+                if (findCycle(current, visited, null))
+                    return false;
+        }         
+        return true;
+    }
+
+    private boolean findCycle(Vertex v, HashSet<Vertex> visited, Vertex parent) {
+        visited.add(v);
+        
+        for (Vertex u : v.adjacent) {
+            if (!visited.contains(u)) {
+                if (findCycle(u, visited, v))
+                    return true;
+            }
+            else if (u != parent)
+                return true;
+        }
         return false;
     }
 
     @Override
     public List<List<Integer>> connectedComponents() {
-        // TODO Auto-generated method stub
-        return null;
+        HashSet<Vertex> connected = new HashSet<>();
+        for (Vertex v : vertices) {
+            for (Vertex u : v.adjacent) {
+                connected.add(u);
+            }
+        }
+        List<List<Integer>> listOfLists = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        connected.forEach(vertex -> list.add(vertex.id) );
+        listOfLists.add(list);
+        vertices.forEach(vertex -> {
+            if (!connected.contains(vertex)) {
+                ArrayList<Integer> l = new ArrayList<>();
+                l.add(vertex.id);
+                listOfLists.add(l);
+            }
+        });
+
+        return listOfLists;
     }
 
     @Override
@@ -56,19 +104,15 @@ public class MyUndirectedGraph implements A3Graph {
 
     private class Vertex {
         int id;
+        List<Vertex> adjacent;
 
         Vertex(int id) {
             this.id = id;
+            adjacent = new ArrayList<>();
         }
-    }
 
-    private class Edge {
-        Vertex v1;
-        Vertex v2;
-
-        Edge(Vertex v1, Vertex v2) {
-            this.v1 = v1;
-            this.v2 = v2;
+        public String toString() {
+            return String.valueOf(id);
         }
     }
 }
