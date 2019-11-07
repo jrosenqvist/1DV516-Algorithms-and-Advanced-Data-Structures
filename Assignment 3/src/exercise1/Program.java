@@ -2,7 +2,7 @@ package exercise1;
 
 class Program {
     public static void main(String[] args) {
-        MyDirectedGraph dg = new MyDirectedGraph();
+        MyDirectedGraph<Integer> dg = new MyDirectedGraph<>();
         dg.addVertex(1);
         dg.addVertex(2);
         dg.addVertex(3);
@@ -16,7 +16,7 @@ class Program {
         System.out.println("Acyclic: " + dg.isAcyclic());
         dg.connectedComponents().forEach(list -> System.out.println(list));
 
-        MyUndirectedGraph ug = new MyUndirectedGraph();
+        MyUndirectedGraph<Integer> ug = new MyUndirectedGraph<>();
         ug.addVertex(1);
         ug.addVertex(2);
         ug.addVertex(3);

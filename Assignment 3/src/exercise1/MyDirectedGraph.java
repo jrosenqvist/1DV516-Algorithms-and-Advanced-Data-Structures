@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
-public class MyDirectedGraph implements A3Graph {
+public class MyDirectedGraph<T> implements A3Graph<T> {
     private List<Vertex> vertices = new ArrayList<>();
 
     @Override
-    public void addVertex(int vertex) {
+    public void addVertex(T vertex) {
         this.vertices.add(new Vertex(vertex));        
     }
 
     @Override
-    public void addEdge(int sourceVertex, int targetVertex) throws NoSuchElementException {
+    public void addEdge(T sourceVertex, T targetVertex) throws NoSuchElementException {
         Vertex source = null;
         Vertex target = null;
         for (Vertex v : vertices) {            
@@ -34,11 +34,10 @@ public class MyDirectedGraph implements A3Graph {
     public boolean isConnected() {
         return (connectedComponents().size() < 2);
     }
-
-    //TODO fixa detta så det kan vara generiskt
+    
     @Override
     public boolean isAcyclic() {        
-        HashSet<Vertex> visited = new HashSet<>();
+        HashSet<Vertex> visited = new HashSet<>(2 * vertices.size());
         HashSet<Vertex> recursion = new HashSet<>();
         
         for (Vertex v : vertices) {
@@ -49,7 +48,7 @@ public class MyDirectedGraph implements A3Graph {
     }
 
     @Override
-    public List<List<Integer>> connectedComponents() {
+    public List<List<T>> connectedComponents() {
         HashSet<Vertex> visited = new HashSet<>();
         Stack<Vertex> stack = new Stack<>();
         for (Vertex v : vertices) {
@@ -59,13 +58,13 @@ public class MyDirectedGraph implements A3Graph {
 
         visited.clear();
 
-        ArrayList<List<Integer>> connections = new ArrayList<>();
+        ArrayList<List<T>> connections = new ArrayList<>();
         while (stack.size() > 0) {
             Vertex v = stack.pop();
             if (!visited.contains(v)) {
                 HashSet<Vertex> comp = new HashSet<>();
                 connectedAssign(v, visited, comp);
-                ArrayList<Integer> set = new ArrayList<>();
+                ArrayList<T> set = new ArrayList<>();
                 comp.forEach(vertex -> set.add(vertex.id));
                 connections.add(set);
             }
@@ -115,9 +114,9 @@ public class MyDirectedGraph implements A3Graph {
 
     private class Vertex {
         List<Edge> connections;
-        int id;
+        T id;
 
-        Vertex(int id) {
+        Vertex(T id) {
             this.id = id;
             connections = new ArrayList<>();
         }

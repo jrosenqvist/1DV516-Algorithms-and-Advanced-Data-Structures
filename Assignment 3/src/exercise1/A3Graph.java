@@ -2,23 +2,23 @@ package exercise1;
 
 import java.util.List;
 
-public interface A3Graph {
+public interface A3Graph<T> {
 	
-	public void addVertex(int vertex);
-	public void addEdge(int sourceVertex,  int targetVertex);
+	public void addVertex(T vertex);
+	public void addEdge(T sourceVertex,  T targetVertex);
 	
 	
 	public boolean isConnected();
 	public boolean isAcyclic();	
 	
-	public List<List<Integer>> connectedComponents();
+	public List<List<T>> connectedComponents();
 	
 	default public boolean hasEulerPath() {
 	    System.out.println("Not implemented");
 	    return false;
 	}
 	
-	default public List<Integer> eulerPath(){
+	default public List<T> eulerPath(){
 	    System.out.println("Not implemented");
 	    return null;
 	}

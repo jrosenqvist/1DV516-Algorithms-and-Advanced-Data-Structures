@@ -5,16 +5,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class MyUndirectedGraph implements A3Graph {    
+public class MyUndirectedGraph<T> implements A3Graph<T> {    
     private List<Vertex> vertices = new ArrayList<>();
     
     @Override
-    public void addVertex(int vertex) {
+    public void addVertex(T vertex) {
         vertices.add(new Vertex(vertex));        
     }
 
     @Override
-    public void addEdge(int sourceVertex, int targetVertex) throws NoSuchElementException {
+    public void addEdge(T sourceVertex, T targetVertex) throws NoSuchElementException {
         Vertex source = null;
         Vertex target = null;
         for (Vertex v : vertices) {            
@@ -68,20 +68,20 @@ public class MyUndirectedGraph implements A3Graph {
     }
 
     @Override
-    public List<List<Integer>> connectedComponents() {
+    public List<List<T>> connectedComponents() {
         HashSet<Vertex> connected = new HashSet<>();
         for (Vertex v : vertices) {
             for (Vertex u : v.adjacent) {
                 connected.add(u);
             }
         }
-        List<List<Integer>> listOfLists = new ArrayList<>();
-        List<Integer> list = new ArrayList<>();
+        List<List<T>> listOfLists = new ArrayList<>();
+        List<T> list = new ArrayList<>();
         connected.forEach(vertex -> list.add(vertex.id) );
         listOfLists.add(list);
         vertices.forEach(vertex -> {
             if (!connected.contains(vertex)) {
-                ArrayList<Integer> l = new ArrayList<>();
+                ArrayList<T> l = new ArrayList<>();
                 l.add(vertex.id);
                 listOfLists.add(l);
             }
@@ -97,16 +97,16 @@ public class MyUndirectedGraph implements A3Graph {
     }
 
     @Override
-    public List<Integer> eulerPath() {
+    public List<T> eulerPath() {
         // TODO Auto-generated method stub
         return A3Graph.super.eulerPath();
     }
 
     private class Vertex {
-        int id;
+        T id;
         List<Vertex> adjacent;
 
-        Vertex(int id) {
+        Vertex(T id) {
             this.id = id;
             adjacent = new ArrayList<>();
         }
