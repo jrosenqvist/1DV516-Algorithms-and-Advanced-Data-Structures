@@ -26,8 +26,9 @@ public class MyDirectedGraph<T> implements A3Graph<T> {
         if (source == null || target == null) {            
             throw new NoSuchElementException();
         }
-        target.connections.add(new Edge(source, target));
-        source.connections.add(new Edge(source, target));
+        Edge e = new Edge(source, target);
+        target.connections.add(e);
+        source.connections.add(e);
     }
 
     @Override
