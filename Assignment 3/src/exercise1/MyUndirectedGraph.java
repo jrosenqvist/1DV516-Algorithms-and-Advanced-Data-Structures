@@ -36,7 +36,6 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
         target.adjacent.add(e);
     }
 
-    // TODO fixa den här
     @Override
     public boolean isConnected() {
         HashSet<Vertex> visited = new HashSet<>();
@@ -49,7 +48,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
     private void connectedHelper(Vertex v, HashSet<Vertex> visited) {
         visited.add(v);
         for (Edge e : v.adjacent) {
-            Vertex target = e.source == v ? e.target : e.source;
+            Vertex target = e.other(v);
             if (!visited.contains(target))
                 connectedHelper(target, visited);
         }
@@ -71,7 +70,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
         visited.add(v);
 
         for (Edge e : v.adjacent) {
-            Vertex u = e.source == v ? e.target : e.source;
+            Vertex u = e.other(v);
             if (!visited.contains(u)) {
                 if (findCycle(u, visited, v))
                     return true;
@@ -86,7 +85,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
         HashSet<Vertex> connected = new HashSet<>();
         for (Vertex v : vertices) {
             for (Edge e : v.adjacent) {
-                Vertex u = e.source == v ? e.target : e.source;
+                Vertex u = e.other(v);
                 connected.add(u);
             }
         }
@@ -152,7 +151,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
                 if (!used.contains(edge)) {
                     used.add(edge);
                     stack.push(v);
-                    v = edge.source == v ? edge.target : edge.source;
+                    v = edge.other(v);
                     adjacent = v.adjacent.iterator();
                 }
             }
@@ -163,9 +162,13 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
         return list;
     }
 
-    private class Vertex {
-        T id;
-        List<Edge> adjacent;
+    public List<Vertex> getVertices() {
+        return new ArrayList<Vertex>(vertices);
+    }
+
+    public class Vertex {
+        private T id;
+        private List<Edge> adjacent;
 
         Vertex(T id) {
             this.id = id;
@@ -175,15 +178,35 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
         public String toString() {
             return String.valueOf(id);
         }
+
+        public T getId() {
+            return id;
+        }
+
+        public List<Edge> getAdjacent() {            
+            return new ArrayList<Edge>(adjacent);
+        }
     }
 
-    private class Edge {
-        Vertex source;
-        Vertex target;
+    public class Edge {
+        private Vertex source;
+        private Vertex target;
 
         Edge(Vertex source, Vertex target) {
             this.source = source;
             this.target = target;
+        }
+
+        public Vertex getSource() {
+            return source;
+        }
+
+        public Vertex getTarget() {
+            return target;
+        }
+
+        public Vertex other(Vertex v) {
+            return v == source ? target : source;
         }
     }
 }
