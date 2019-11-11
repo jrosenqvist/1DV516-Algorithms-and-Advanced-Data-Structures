@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
-import exercise1.*;
+import exercise1and2.*;
 
 public class MySocialNetwork<T> extends MyUndirectedGraph<T> implements A3SocialNetwork<T> {
 
