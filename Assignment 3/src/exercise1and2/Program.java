@@ -26,7 +26,7 @@ class Program {
         ug.addEdge(3, 1);
         ug.addEdge(2, 1);
         ug.addEdge(4, 1);
-        ug.addEdge(3, 2);
+        ug.addEdge(3, 2);        
         System.out.println("\n== UNDIRECTED GRAPH == ");
         System.out.println("Connected: " + ug.isConnected());
         System.out.println("Acyclic: " + ug.isAcyclic());
