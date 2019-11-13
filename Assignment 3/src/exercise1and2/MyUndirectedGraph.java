@@ -38,7 +38,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
 
     @Override
     public boolean isConnected() {
-        HashSet<Vertex> visited = new HashSet<>();
+        HashSet<Vertex> visited = new HashSet<>(2 * vertices.size());
 
         connectedHelper(vertices.get(0), visited);
 
