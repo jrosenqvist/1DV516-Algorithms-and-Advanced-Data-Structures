@@ -48,6 +48,24 @@ public class MyDirectedGraph<T> implements A3Graph<T> {
         return true;
     }
 
+    private boolean acyclicHelper(Vertex v, HashSet<Vertex> visited, HashSet<Vertex> recursion) {                
+        if (!visited.contains(v)) {
+            visited.add(v);
+            recursion.add(v);
+
+            for (Edge e : v.connections) {
+                if (e.target == v) {
+                    if (!visited.contains(e.source) && acyclicHelper(e.source, visited, recursion))
+                        return true;
+                    else if (recursion.contains(e.source))
+                        return true;
+                }
+            }            
+        }        
+        recursion.remove(v);
+        return false;
+    }
+
     @Override
     public List<List<T>> connectedComponents() {
         HashSet<Vertex> visited = new HashSet<>();
@@ -72,25 +90,7 @@ public class MyDirectedGraph<T> implements A3Graph<T> {
         }
         
         return connections;
-    }
-
-    private boolean acyclicHelper(Vertex v, HashSet<Vertex> visited, HashSet<Vertex> recursion) {                
-        if (!visited.contains(v)) {
-            visited.add(v);
-            recursion.add(v);
-
-            for (Edge e : v.connections) {
-                if (e.target == v) {
-                    if (!visited.contains(e.source) && acyclicHelper(e.source, visited, recursion))
-                        return true;
-                    else if (recursion.contains(e.source))
-                        return true;
-                }
-            }            
-        }        
-        recursion.remove(v);
-        return false;
-    }
+    }    
 
     private void connectedVisitor(Vertex u, HashSet<Vertex> visited, Stack<Vertex> cVerts) {
         visited.add(u);
