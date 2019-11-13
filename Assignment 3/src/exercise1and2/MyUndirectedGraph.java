@@ -56,7 +56,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
 
     @Override
     public boolean isAcyclic() {
-        HashSet<Vertex> visited = new HashSet<>();
+        HashSet<Vertex> visited = new HashSet<>(2 * vertices.size());
         for (int i = 0; i < vertices.size(); i++) {
             Vertex current = vertices.get(i);
             if (!visited.contains(current))
@@ -82,7 +82,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
 
     @Override
     public List<List<T>> connectedComponents() {
-        HashSet<Vertex> connected = new HashSet<>();
+        HashSet<Vertex> connected = new HashSet<>(2 * vertices.size());
         for (Vertex v : vertices) {
             for (Edge e : v.adjacent) {
                 Vertex u = e.other(v);
@@ -128,7 +128,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
     @Override
     public List<T> eulerPath() {
         Vertex start = null;
-        HashSet<Edge> used = new HashSet<>();
+        HashSet<Edge> used = new HashSet<>(2 * vertices.size());
         Stack<Vertex> stack = new Stack<>();
         LinkedList<Vertex> path = new LinkedList<>();
 
