@@ -19,9 +19,12 @@ public class MyDirectedGraph<T> implements A3Graph<T> {
         Vertex source = null;
         Vertex target = null;
         for (Vertex v : vertices) {            
-            if (v.id == sourceVertex) source = v;
-            if (v.id == targetVertex) target = v;
-            if (source != null && target != null) break;
+            if (v.id == sourceVertex) 
+                source = v;
+            if (v.id == targetVertex) 
+                target = v;
+            if (source != null && target != null) 
+                break;
         }
         if (source == null || target == null) {            
             throw new NoSuchElementException();
@@ -39,23 +42,23 @@ public class MyDirectedGraph<T> implements A3Graph<T> {
     @Override
     public boolean isAcyclic() {        
         HashSet<Vertex> visited = new HashSet<>(2 * vertices.size());
-        HashSet<Vertex> recursion = new HashSet<>();
+        HashSet<Vertex> recursion = new HashSet<>(2 * vertices.size());
         
         for (Vertex v : vertices) {
-            if (acyclicHelper(v, visited, recursion))
+            if (findCycle(v, visited, recursion))
                 return false;
         }
         return true;
     }
 
-    private boolean acyclicHelper(Vertex v, HashSet<Vertex> visited, HashSet<Vertex> recursion) {                
+    private boolean findCycle(Vertex v, HashSet<Vertex> visited, HashSet<Vertex> recursion) {                
         if (!visited.contains(v)) {
             visited.add(v);
             recursion.add(v);
 
             for (Edge e : v.connections) {
                 if (e.target == v) {
-                    if (!visited.contains(e.source) && acyclicHelper(e.source, visited, recursion))
+                    if (!visited.contains(e.source) && findCycle(e.source, visited, recursion))
                         return true;
                     else if (recursion.contains(e.source))
                         return true;
@@ -68,7 +71,7 @@ public class MyDirectedGraph<T> implements A3Graph<T> {
 
     @Override
     public List<List<T>> connectedComponents() {
-        HashSet<Vertex> visited = new HashSet<>();
+        HashSet<Vertex> visited = new HashSet<>(2 * vertices.size());
         Stack<Vertex> stack = new Stack<>();
         for (Vertex v : vertices) {
             if (!visited.contains(v))
@@ -81,7 +84,7 @@ public class MyDirectedGraph<T> implements A3Graph<T> {
         while (stack.size() > 0) {
             Vertex v = stack.pop();
             if (!visited.contains(v)) {
-                HashSet<Vertex> comp = new HashSet<>();
+                HashSet<Vertex> comp = new HashSet<>(2 * vertices.size());
                 connectedAssign(v, visited, comp);
                 ArrayList<T> set = new ArrayList<>();
                 comp.forEach(vertex -> set.add(vertex.id));

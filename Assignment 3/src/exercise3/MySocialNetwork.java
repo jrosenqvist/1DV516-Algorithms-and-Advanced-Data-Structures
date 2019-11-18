@@ -11,14 +11,8 @@ public class MySocialNetwork<T> extends MyUndirectedGraph<T> implements A3Social
 
     @Override
     public int numberOfPeopleAtFriendshipDistance(T vertex, int distance) {
-        Vertex start = null;
-        for (Vertex v : getVertices()) {
-            if (v.getId() == vertex)
-                start = v;
-        }
-        if (start == null)
-            throw new IllegalArgumentException();
-        
+        Vertex start = findNodeFromId(vertex);
+                
         return setOfNodesAtDistance(start, distance).size();
     }
 
@@ -71,7 +65,7 @@ public class MySocialNetwork<T> extends MyUndirectedGraph<T> implements A3Social
     }
 
     private ArrayList<HashSet<Vertex>> listOfSetsToDistance(Vertex u, int distance) {
-        HashSet<Vertex> visited = new HashSet<>();
+        HashSet<Vertex> visited = new HashSet<>(2 * getVertices().size());
         ArrayList<HashSet<Vertex>> nodesAtDistance = new ArrayList<>();
         visited.add(u);
         nodesAtDistance.add(0, visited);
