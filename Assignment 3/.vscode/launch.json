@@ -6,15 +6,23 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch) - Current File",
+            "name": "CodeLens (Launch) - Program",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "exercise1and2.Program",
+            "projectName": "Assignment 3_c4d906d6"
         },
         {
             "type": "java",
-            "name": "Debug (Launch)-Program<Assignment 3_c4d906d6>",
+            "name": "CodeLens (Launch) - Program",
             "request": "launch",
-            "mainClass": "exercise1.Program",
+            "mainClass": "exercise3.Program",
+            "projectName": "Assignment 3_c4d906d6"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Test",
+            "request": "launch",
+            "mainClass": "tests.Test",
             "projectName": "Assignment 3_c4d906d6"
         }
     ]

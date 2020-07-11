@@ -22,5 +22,4 @@ public interface A3Graph<T> {
 	    System.out.println("Not implemented");
 	    return null;
 	}
-	
 }

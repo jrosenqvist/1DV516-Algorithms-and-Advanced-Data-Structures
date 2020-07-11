@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/spender/Skolgrejer/1DV516 - Algorithms and Advanced Data Structures/Assignment 3/**/*.jar"
+    ]
+}

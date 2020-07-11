@@ -1,22 +1,22 @@
 package exercise3;
 
 public class Program {
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
         MySocialNetwork<Integer> msn = new MySocialNetwork<>();
 
         for (int i = 1; i <= 15; i++)
-            msn.addVertex(i);
+            msn.addVertex(new Integer(i));
 
         msn.addEdge(1, 2);
         msn.addEdge(1, 3);
-        msn.addEdge(1, 4);
+        msn.addEdge(1, new Integer(4));
         msn.addEdge(1, 5);
         msn.addEdge(2, 5);
         msn.addEdge(2, 3);
         msn.addEdge(2, 4);
         msn.addEdge(3, 4);
         msn.addEdge(3, 6);
-        msn.addEdge(3, 13);
+        msn.addEdge(new Integer(3), 13);
         msn.addEdge(4, 5);
         msn.addEdge(5, 6);
         msn.addEdge(5, 7);

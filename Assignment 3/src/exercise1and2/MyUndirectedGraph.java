@@ -21,9 +21,9 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
         Vertex source = null;
         Vertex target = null;
         for (Vertex v : vertices) {
-            if (v.id == sourceVertex)
+            if (v.id.equals(sourceVertex))
                 source = v;
-            if (v.id == targetVertex)
+            if (v.id.equals(targetVertex))
                 target = v;
             if (source != null && target != null)
                 break;
@@ -181,7 +181,7 @@ public class MyUndirectedGraph<T> implements A3Graph<T> {
         public T getId() {
             return id;
         }
-
+        
         public List<Edge> getAdjacent() {
             return new ArrayList<Edge>(adjacent);
         }

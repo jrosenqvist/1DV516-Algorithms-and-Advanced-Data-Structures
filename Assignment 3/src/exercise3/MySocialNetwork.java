@@ -51,7 +51,7 @@ public class MySocialNetwork<T> extends MyUndirectedGraph<T> implements A3Social
     private Vertex findNodeFromId (T id) {
         Vertex node = null;
         for (Vertex v : getVertices()) {
-            if (v.getId() == id)
+            if (v.getId().equals(id))
                 node = v;
         }
         if (node != null) {
